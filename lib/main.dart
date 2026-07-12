@@ -35,6 +35,11 @@ void main() async {
     'ca-app-pub-6031227362246075/5495292840',
     kShowTestAppOpenAds,
   );
+  loadInterstitialAd(
+    '', // add an iOS ad unit id here if you build for iOS
+    'ca-app-pub-6031227362246075/2822087534',
+    kShowTestInterstitialAds,
+  );
 
   await FFLocalizations.initialize();
 
