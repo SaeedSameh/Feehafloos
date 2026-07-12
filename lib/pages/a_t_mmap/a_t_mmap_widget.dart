@@ -410,8 +410,9 @@ class _ATMmapWidgetState extends State<ATMmapWidget> {
                                         .secondaryText,
                                     size: 24.0,
                                   ),
-                                  fillColor:
-                                      FlutterFlowTheme.of(context).transparent,
+                               fillColor:
+                                            FlutterFlowTheme.of(context)
+                                                .primaryBackground,
                                   elevation: 2.0,
                                   borderColor: Colors.transparent,
                                   borderWidth: 0.0,
