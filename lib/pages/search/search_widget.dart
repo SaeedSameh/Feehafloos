@@ -469,7 +469,6 @@ class _SearchWidgetState extends State<SearchWidget>
                                         isOverButton: false,
                                         isSearchable: true,
                                         isMultiSelect: false,
-                                        dropdownColor: Colors.white,
                                       ),
                                     ),
                                   ].divide(SizedBox(width: 16.0)),
