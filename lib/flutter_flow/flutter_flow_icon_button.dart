@@ -60,10 +60,10 @@ class _FlutterFlowIconButtonState extends State<FlutterFlowIconButton> {
   }
 
   void _updateIcon() {
-    final isFontAwesome = widget.icon is FaIcon;
+    final isFontAwesome = widget.icon is Icon;
     if (isFontAwesome) {
-      FaIcon icon = widget.icon as FaIcon;
-      effectiveIcon = FaIcon(
+      Icon icon = widget.icon as Icon;
+      effectiveIcon = Icon(
         icon.icon,
         size: icon.size,
       );
