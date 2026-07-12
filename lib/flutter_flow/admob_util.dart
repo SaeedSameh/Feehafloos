@@ -14,6 +14,9 @@ const bool kShowTestInterstitialAds = false;
 
 InterstitialAd? _interstitialAd;
 String? _loadingInterstitialAdUnitId;
+String? _lastInterstitialIosAdUnitId;
+String? _lastInterstitialAndroidAdUnitId;
+bool _lastInterstitialShowTestAds = false;
 
 void loadInterstitialAd(
   String iosAdUnitId,
@@ -24,6 +27,9 @@ void loadInterstitialAd(
     print('AdMob is not supported on web.');
     return;
   }
+  _lastInterstitialIosAdUnitId = iosAdUnitId;
+  _lastInterstitialAndroidAdUnitId = androidAdUnitId;
+  _lastInterstitialShowTestAds = showTestAds;
   String adUnitId;
   if (Platform.isIOS) {
     adUnitId =
@@ -79,12 +85,26 @@ Future<bool> showInterstitialAd() async {
       ad.dispose();
       _interstitialAd = null;
       completer.complete(true);
+      if (_lastInterstitialAndroidAdUnitId != null) {
+        loadInterstitialAd(
+          _lastInterstitialIosAdUnitId ?? '',
+          _lastInterstitialAndroidAdUnitId!,
+          _lastInterstitialShowTestAds,
+        );
+      }
     },
     onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
       print('$ad onAdFailedToShowFullScreenContent: $error');
       ad.dispose();
       _interstitialAd = null;
       completer.complete(false);
+      if (_lastInterstitialAndroidAdUnitId != null) {
+        loadInterstitialAd(
+          _lastInterstitialIosAdUnitId ?? '',
+          _lastInterstitialAndroidAdUnitId!,
+          _lastInterstitialShowTestAds,
+        );
+      }
     },
   );
   _interstitialAd!.show();
@@ -142,6 +162,7 @@ void adMobUpdateRequestConfiguration() {
 AppOpenAd? _appOpenAd;
 bool _isShowingAppOpenAd = false;
 bool _isLoadingAppOpenAd = false;
+bool _appReadyToShowOpenAd = false;
 
 void loadAppOpenAd(
   String iosAdUnitId,
@@ -171,6 +192,11 @@ void loadAppOpenAd(
       onAdLoaded: (AppOpenAd ad) {
         _appOpenAd = ad;
         _isLoadingAppOpenAd = false;
+        // If the splash screen already finished waiting for us, show the
+        // ad right away instead of waiting for the next app launch.
+        if (_appReadyToShowOpenAd) {
+          showAppOpenAdIfAvailable();
+        }
       },
       onAdFailedToLoad: (LoadAdError error) {
         print('AppOpenAd failed to load: $error');
@@ -184,6 +210,7 @@ void showAppOpenAdIfAvailable() {
   if (kIsWeb) {
     return;
   }
+  _appReadyToShowOpenAd = true;
   if (_appOpenAd == null || _isShowingAppOpenAd) {
     print('AppOpenAd is not ready to be shown yet.');
     return;
