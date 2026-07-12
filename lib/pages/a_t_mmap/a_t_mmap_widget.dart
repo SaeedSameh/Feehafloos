@@ -423,6 +423,7 @@ class _ATMmapWidgetState extends State<ATMmapWidget> {
                                   isOverButton: false,
                                   isSearchable: true,
                                   isMultiSelect: false,
+                                  dropdownColor: Colors.white,
                                 ),
                               ),
                             ].divide(SizedBox(width: 16.0)),
